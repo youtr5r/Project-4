@@ -1,58 +1,35 @@
-// /* Treehouse FSJS Techdegree
-//  * Project 4 - OOP Game App
-//  * Phrase.js */
-
+//makes the phrase lowercase
 class Phrase {
-   constructor(phrase) {
-      this.phrase = phrase;
-   }
-   addPhraseToDisplay() {
-     
-     
-     //Create a variable to reference the ID where the <ul></ul> is located
-     let ul = document.getElementById('phrase');
-     ul.innerHTML = "";
-     //used split method to split a string into an array of substrings
-     const splitter = this.phrase.split("");
-      splitter.forEach( letter => {
-          let li = document.createElement('li');
-          ul.append(li);
-          if (letter === " ") {
-             li.className += " space";
-          } else {
-              li.innerHTML = letter;
-              li.className += ' letter',`${letter}`;
-          }
-          ul.appendChild(li);
-      });
-  }
- 
-  //see if letter that is selected matches a letter in phrase
-  //initaly set to false. Once checked equal true
-  checkLetter(Letter) {
-     let letterPlaceHolder = false;
-     for(let i = 0; i <this.phrase.length; i + 1) {
-         if (Letter === this.phrase[i]){
-             letterPlaceHolder = true
-         }
+     constructor (phrase) {
+        this.phrase = phrase.toLowerCase();
      }
- 
-  }
- 
- 
-    
- 
- 
- 
-     
+
+//adds phrase to display on gameboard
+     addPhraseToDisplay () {
+         
+        let ul = document.querySelector('#phrase ul');
+        ul.innerHTML = '';
+          const splitter = this.phrase.split('');
+          splitter.forEach(letter => {
+               const li = document.createElement('li');
+               ul.appendChild(li);
+               if (letter === ' ') {
+                    li.className = ('space');
+               } else {
+                    li.innerHTML = letter;
+                    li.className = (`hide letter ${letter}`);
+               }
+          });
+     }
+
+//function to see if the letter that's chosen by the user is a match of a letter in the phrase
+     checkLetter(letter) {
+          return this.phrase.indexOf(letter) >= 0;
+     }
+
+//if letter selected matches any letter in the phrase it will show on gameboard
      showMatchedLetter(letter) {
-       const myPhraseWords = document.querySelectorAll('#phrase li');
-       ///console.log(myPhraseWords);
-       Array.from(myPhraseWords)
-       .filter(el => el.textContent.toLowerCase() === letter)
-       .map(el => {
-         el.classList.remove('hide');
-         el.classList.add('show');
-         });
+          let lettersThatMatch = $(`.${letter}`);
+          $(lettersThatMatch).removeClass('hide').addClass('show');
      }
-   }
+ }
