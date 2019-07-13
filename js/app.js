@@ -1,26 +1,24 @@
-// let game;
-// const game = new Game();
-// const startButton = document.getElementById("btn_reset");
-// //when the button is clicked it will start a new game. 
-// startButton.addEventListener('click', function(){
-//     game.startGame();
-//     //game.handleInteraction();
-// });
 let game;
-//select start game button and adds event listener to it to start new game
-const startButton = document.getElementById('btn__reset');
 
-startButton.addEventListener('click', () => {
-  
-  game = new Game();
-  game.startGame();
-  
-  //game.handleInteraction();  
+//event handler will create a new game after reset button is clicked
+$('#btn__reset').on('click', function () {
+    game = new Game();
+    game.startGame();
 });
-const keyBoardButton = Array.from(document.querySelectorAll("#qwerty button"));
-   keyBoardButton.forEach( (item) => {
-     item.addEventListener("click", event => game.handleInteraction(event.target));
-     });
 
-//console.log(`Phrase - phrase: ${phrase.phrase}`);
+$('.key').on('click', function (key) {
+    game.handleInteraction(key);
+});
 
+//adds keyboard functionality for game.
+$(document).on('keyup', function (e) {
+    let letterKey = [];
+    if (letterKey.includes(e.key.toLowerCase())) {
+        for (let key of  $('.key')) {
+            if (key.innerText == e.key.toLowerCase()) {
+                key.click();
+            }
+        }
+    }
+    
+});
