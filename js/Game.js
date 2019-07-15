@@ -49,7 +49,7 @@ this will check for win  and adds chosen class otherwise(else) it will add wrong
             } 
 
             if (this.missed === 5) {
-                this.gameOver();
+                this.gameOver(false);
             }
     }
 
