@@ -92,8 +92,4 @@ startGame () {
     this.activePhrase.addPhraseToDisplay(); 
     }
 
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 2bb00d3a54cbef749ab7f9aa24aea6d135fa81d8
