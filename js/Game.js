@@ -55,20 +55,20 @@ this will check for win  and adds chosen class otherwise(else) it will add wrong
 
 //if game is one it will be true. If game is lost it will return false
     checkForWin() {
-        if ($('.hide').length === 0) {
+        if ($('.show').length === $('.letter').length ) {
             this.gameOver(true);
         } 
         // else{
-        //     this.gameOver(false);
+        //     return false;
         // }
     }
 
 //this method shows the dialog box after the game letting the user know if they won or lost 
-    gameOver (gameWon) {
+    gameOver (WinLose) {
         // console.log(gameWon);
         $('#overlay').show();
-        if (gameWon) {
-            $('#game-over-message').text('You win!');
+        if (WinLose) {
+            $('#game-over-message').text('You won!');
             $('.start').removeClass('lose').addClass('win');
         } else {
             $('#game-over-message').text('You lose!');
