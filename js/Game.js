@@ -1,114 +1,95 @@
-/* Treehouse FSJS Techdegree
- * Project 4 - OOP Game App
- * Game.js */
-
+/*
+* add a game class.
+* create constructor with an empty parameter.
+* setting the missed to 0. this will act as a counter during the game.
+* make array of 5 phrases
+*/
 class Game {
-    constructor() {
+    constructor () {
         this.missed = 0;
-        this.phrases = [ 
-            new Phrase('Team Treehouse'),
-            new Phrase('Classes contain objects'),
-            new Phrase('Objects have properties'),
-            new Phrase('Javascript is fun'),
-            new Phrase('Callback function')
-    ];
+        this.phrases = this.createPhrases();                      
         this.activePhrase = null;
-  
-        
-    }
-    
-  
-    /**
-     * This method will select a random phrases property
-     * Return phrases variable because it contains all of the phrases
-     */
-    getRandomPhrase() {
-        let phraseGenerator = Math.floor(Math.random() * this.phrases.length);
-        return this.phrases[phraseGenerator];
-        }  
-     
-        //hides start screen and generates a random phrase 
-        startGame() {
-            document.getElementById("overlay").style.display = "none";
-            const randomPhrase = this.getRandomPhrase();
-            this.activePhrase = randomPhrase;
-            randomPhrase.addPhraseToDisplay();
-            
-            //this.ready =true;
-            
-        }
-        
-        //checks for win
-        checkForWin() {
-          let gameLetters = Array.from(document.querySelectorAll('#phrase.section ul li.letter'));
-          return myli.every( element => element.classList.contains('show'));
-        }
-  
-        //handler controls button click
-        //handler for whole window
-        handleInteraction(button) {
-          let letter = button.innerHTML;      
-          const checker = this.activePhrase.checkLetter(letter);        
-          button.setAttribute('disabled',true);
-          if (checker) {      
-            button.classList.add('chosen');
-            game.activePhrase.showMatchedLetter(letter);
-            if (this.checkForWin()) {
-              this.gameOver(true);
-              //this.setBackground('loser');
-            }
-          } else {      
-            button.classList.add('wrong');
-            this.removeLife();
-          }
-      
-        }
-  /**
-    * Increases the value of the missed property
-    * Removes a life from the scoreboard
-    * Checks if player has remaining lives and ends game if player is out
-    */
-   removeLife() {
-      let lives = document.getElementsByClassName('tries');
-      lives = Array.from(lives);
-      lives = lives.filter( el => el.firstChild.getAttribute("src") === "images/liveHeart.png");
-      lives[0].firstChild.setAttribute('src','images/lostHeart.png');
-      this.missed += 1;
-      if (this.missed === 5){
-        this.gameOver(false);
-      }
-    }
-   
-    gameOver(gameWon) {
-      const startScreen = document.querySelector('#overlay');
-      const gameOverMessage = document.getElementById("game-over-message");
-      if(gameWon) {
-      startScreen.style.display = 'show';
-      startScreen.classList.remove('start','lose');
-      startScreen.classList.add('win');
-      gameOverMessage.textContent = "Winner Winner Chicken Dinner";
-      } else {    
-      startScreen.style.display = 'show';
-      startScreen.classList.remove('start','win');
-      startScreen.classList.add('lose');
-      gameOverMessage.textContent = "Sorry, No chicken dinner for you";
-      }
-      this.resetGame();
-    }
-    
-     //resets game. Array.from returns array from objecr
-     resetGame() {
-      Array.from(document.querySelectorAll('#phrase li')).forEach(el => el.remove());
-      let buttons = document.selectElementsByClassName('.key');
-      buttons.forEach(el => {
-        el.removeAttribute('disabled');
-        el.classList.remove('chosen','wrong');
-        el.classList.add('key');
-      });
-      document.querySelectorAll('.tries img').forEach(img => img.src = "images/liveHeart.png");
-      this.missed = 0;
     } 
-  
-  
-  }
-  
+createPhrases() {
+    const myPhrases =  [
+        new Phrase ('Dallas Cowboys'),
+        new Phrase ('Atlanta Falcons'),
+        new Phrase ('Denver Broncos'),
+        new Phrase ('Houston Texans'),
+        new Phrase ('Kansas City Chiefs')
+    ];
+    return myPhrases;
+}
+//generates a random phrase
+    getRandomPhrase() {            
+        let randomPhrases = Math.floor(Math.random() * this.phrases.length);
+        return this.phrases[randomPhrases];  
+    }
+
+/*
+handles the users interaction and checks letter against phrase.
+this will check for win  and adds chosen class otherwise(else) it will add wrong class and remove life.
+*/
+    handleInteraction (e) {
+        if (this.activePhrase.checkLetter(e.target.textContent)) {
+            this.activePhrase.showMatchedLetter(e.target.textContent);
+            $(e.target).addClass('chosen').attr('disabled', true);
+            this.checkForWin();
+        } else {
+            $(e.target).addClass('wrong').attr('disabled', true);
+            this.removeLife();
+        }  
+    };
+
+//This will count how many hearts are being deducted and if the total number of deducted hearts equals 5 the game is over
+    removeLife() {
+        this.missed+=1;
+            if (this.missed <= 5) {
+                $('.tries [src="images/liveHeart.png"]:first').attr('src', "images/lostHeart.png");
+            } 
+
+            if (this.missed === 5) {
+                this.gameOver();
+            }
+    }
+
+//if game is one it will be true. If game is lost it will return false
+    checkForWin() {
+        if ($('.hide').length === 0) {
+            this.gameOver(true);
+        } 
+        // else{
+        //     this.gameOver(false);
+        // }
+    }
+
+//this method shows the dialog box after the game letting the user know if they won or lost 
+    gameOver (gameWon) {
+        // console.log(gameWon);
+        $('#overlay').show();
+        if (gameWon) {
+            $('#game-over-message').text('You win!');
+            $('.start').removeClass('lose').addClass('win');
+        } else {
+            $('#game-over-message').text('You lose!');
+            $('.start').removeClass('win').addClass('lose'); 
+        }
+        this.resetGame();
+    }
+
+//this method resets the entire game by removing the li elements 
+    resetGame () {
+        $('#phrase ul li').remove();
+        $('.key').removeClass('chosen').removeClass('wrong').removeAttr('disabled');
+        $('.tries [src="images/lostHeart.png"]').attr('src', "images/liveHeart.png");
+    }
+
+// selects element by id and hides that element(dialogue box).
+//gets random phrase
+startGame () {
+    $('#overlay').hide();
+    this.activePhrase = this.getRandomPhrase();
+    this.activePhrase.addPhraseToDisplay(); 
+    }
+
+}
